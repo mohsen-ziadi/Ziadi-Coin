@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Mohsen Ziadi",
+  "license": "MIT",
   "devDependencies": {
     "jest": "^30.0.0"
   },
