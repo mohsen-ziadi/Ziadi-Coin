@@ -12,11 +12,13 @@ class Blockchain {
       data,
     });
 
+    console.log("The new block added to chain >>");
     this.chain.push(newBlock);
   }
 
   static isValidChain(chain) {
     if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) {
+      console.error("The first block of chain not equal to genesis block >>>");
       return false;
     }
 
@@ -26,10 +28,17 @@ class Blockchain {
 
       const { timestamp, lastHash, hash, data } = block;
 
-      if (lastHash !== actualLastHash) return false;
-      if (hash !== cryptoHash(timestamp, lastHash, data)) return false;
+      if (lastHash !== actualLastHash) {
+        console.error(`The lastHash block [${i}] not equal to actualLastHash [${i-1}]>>>`);
+        return false;
+      }
+      if (hash !== cryptoHash(timestamp, lastHash, data)) {
+        console.error(`The hash of this block [${i}] not equal hash of blocks data >>>`);
+        return false;
+      }
     }
 
+    console.log("This chain is valid >>");
     return true;
   }
 
