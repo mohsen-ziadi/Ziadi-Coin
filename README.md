@@ -31,7 +31,7 @@ It aims to demonstrate the core concepts of blockchain technology, such as block
 ## 💪 How to Run
 
 ```bash
-git clone https://github.com/your-username/ziadi-coin.git
+git clone https://github.com/ymohsen_ziadi/ziadi-coin.git
 cd ziadi-coin
 npm i
 node test
