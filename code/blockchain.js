@@ -26,14 +26,18 @@ class Blockchain {
       const block = chain[i];
       const actualLastHash = chain[i - 1].hash;
 
-      const { timestamp, lastHash, hash, data } = block;
+      const { timestamp, lastHash, hash, data, difficulty, nonce } = block;
 
       if (lastHash !== actualLastHash) {
-        console.error(`The lastHash block [${i}] not equal to actualLastHash [${i-1}]>>>`);
+        console.error(
+          `The lastHash block [${i}] not equal to actualLastHash [${i - 1}]>>>`
+        );
         return false;
       }
-      if (hash !== cryptoHash(timestamp, lastHash, data)) {
-        console.error(`The hash of this block [${i}] not equal hash of blocks data >>>`);
+      if (hash !== cryptoHash(timestamp, lastHash, data, difficulty, nonce)) {
+        console.error(
+          `The hash of this block [${i}] not equal hash of blocks data >>>`
+        );
         return false;
       }
     }
