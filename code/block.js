@@ -16,23 +16,22 @@ class Block {
   }
 
   static mineBlock({ lastBlock, data }) {
-    // const timestamp = Date.now();
     let timestamp, hash;
     const lastHash = lastBlock.hash;
-    const {difficulty} = lastBlock
+    const { difficulty } = lastBlock;
     let nonce = 0;
     do {
-      nonce++;
       timestamp = Date.now();
+      nonce++;
       hash = cryptoHash(timestamp, lastHash, data, difficulty, nonce);
     } while (hash.substring(0, difficulty) !== "0".repeat(difficulty));
     return new this({
       timestamp,
       lastHash,
+      hash,
       data,
       difficulty,
       nonce,
-      hash,
     });
   }
 }
