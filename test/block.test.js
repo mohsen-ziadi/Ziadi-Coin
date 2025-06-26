@@ -21,7 +21,7 @@ describe("Block", () => {
     nonce,
   });
 
-  it("has a timestamp, lastHash, hash and data property", () => {
+  it("Has a timestamp, lastHash, hash and data property", () => {
     expect(block.timestamp).toEqual(timestamp);
     expect(block.lastHash).toEqual(lastHash);
     expect(block.hash).toEqual(hash);
@@ -32,11 +32,11 @@ describe("Block", () => {
 
   describe("genesis()", () => {
     const genesisblock = Block.genesis();
-    it("return a block instance", () => {
+    it("Return a block instance", () => {
       expect(genesisblock instanceof Block).toEqual(true);
     });
 
-    it("return the genesis data", () => {
+    it("Return the genesis data", () => {
       expect(genesisblock).toEqual(GENESIS_DATA);
     });
   });
@@ -46,23 +46,23 @@ describe("Block", () => {
     const data = "mined data";
     const minedBlock = Block.mineBlock({ lastBlock, data });
 
-    it("return a block instance", () => {
+    it("Return a block instance", () => {
       expect(minedBlock instanceof Block).toEqual(true);
     });
 
-    it("set the `lastHash` to the `hash` of the lastBlock", () => {
+    it("Set the `lastHash` to the `hash` of the lastBlock", () => {
       expect(minedBlock.lastHash).toEqual(lastBlock.hash);
     });
 
-    it("sets the `data`", () => {
+    it("Sets the `data`", () => {
       expect(minedBlock.data).toEqual(data);
     });
 
-    it("sets the `timestamp`", () => {
+    it("Sets the `timestamp`", () => {
       expect(minedBlock.timestamp).not.toEqual(undefined);
     });
 
-    it("creates a SHA-256 `hash` based on the proper inputs", () => {
+    it("Creates a SHA-256 `hash` based on the proper inputs", () => {
       expect(minedBlock.hash).toEqual(
         cryptoHash(
           minedBlock.timestamp,
@@ -74,13 +74,13 @@ describe("Block", () => {
       );
     });
 
-    it("sets a `hash` that maches the difficulty criteria", () => {
+    it("Sets a `hash` that maches the difficulty criteria", () => {
       expect(hexToBinary(minedBlock.hash).substring(0, minedBlock.difficulty)).toEqual(
         "0".repeat(minedBlock.difficulty)
       );
     });
 
-    it("adjust the difficulty ", () => {
+    it("Adjust the difficulty ", () => {
       const possibleResults = [
         lastBlock.difficulty + 1,
         lastBlock.difficulty - 1,
@@ -90,7 +90,7 @@ describe("Block", () => {
   });
 
   describe("adjustDifficulty()", () => {
-    it("raises the difficulty for a quickly mined block", () => {
+    it("Raises the difficulty for a quickly mined block", () => {
       expect(
         Block.adjustDifficulty({
           originalBlock: block,
@@ -99,7 +99,7 @@ describe("Block", () => {
       ).toEqual(block.difficulty + 1);
     });
 
-    it("lowers the difficulty for a slowly mined block", () => {
+    it("Lowers the difficulty for a slowly mined block", () => {
       expect(
         Block.adjustDifficulty({
           originalBlock: block,
@@ -108,7 +108,7 @@ describe("Block", () => {
       ).toEqual(block.difficulty - 1);
     });
 
-    it("has a lower limit of 1", () => {
+    it("Has a lower limit of 1", () => {
       block.difficulty = -1;
       expect(Block.adjustDifficulty({ originalBlock: block })).toEqual(1);
     });
