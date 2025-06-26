@@ -10,7 +10,6 @@ async function getBlocks(req, res) {
 }
 
 async function mineBlock(req, res) {
-
   const { data } = req.body;
 
   blockchain.addBlock({ data });
