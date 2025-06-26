@@ -1,6 +1,6 @@
 const cryptoHash = require("./crypto-hash");
 const INITIAL_DIFFICULTY = 4;
-const MINE_RATE = 2800;
+const MINE_RATE = 3500;
 
 const GENESIS_DATA = {
   timestamp: 14040322,
