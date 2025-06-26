@@ -4,11 +4,13 @@
   "description": "my first project in Blockchain",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "nodemon main.js"
   },
   "author": "Mohsen Ziadi",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "jest": "^30.0.0"
   },
   "dependencies": {
