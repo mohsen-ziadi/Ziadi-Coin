@@ -1,9 +1,7 @@
 const express = require("express");
-const cors = require("cors");
-const Blockchain = require("./blockchainApp/code/blockchain");
 const api = require("./api");
 const { handler } = require("./errors/handlers");
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 
@@ -18,8 +16,7 @@ app.use(function (req, res, next) {
 
 app.use(handler);
 
-// run app
-app.listen(process.env.PORT, () => {
-  console.log(`Server is Running on port ${process.env.PORT}`);
-  // console.log(`Server is Running on port: 3000`);
+let port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`Server is Running on port ${port}`);
 });

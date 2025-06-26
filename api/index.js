@@ -1,11 +1,8 @@
 const { Router } = require("express");
 const router = Router();
+const { getBlocks , mineBlock } = require("./index.controller");
 
-router.use("/", (req,res) => {
-  return res.status(201).json({
-    success: true,
-    message: "hello mosi",
-  });
-});
+router.get("/blocks", getBlocks);
+router.post("/mine", mineBlock);
 
 module.exports = router;
