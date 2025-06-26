@@ -4,15 +4,23 @@
   "description": "my first project in Blockchain",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "nodemon main.js"
   },
   "author": "Mohsen Ziadi",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "jest": "^30.0.0"
   },
   "dependencies": {
     "@types/jest": "^29.5.14",
-    "hex-to-binary": "^1.0.1"
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "hex-to-binary": "^1.0.1",
+    "nodemon": "^3.1.10",
+    "redis": "^5.5.6",
+    "tcp-port-used": "^1.0.2"
   }
 }
