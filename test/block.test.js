@@ -1,6 +1,8 @@
 const Block = require("../code/block");
 const { GENESIS_DATA, MINE_RATE } = require("../code/config");
 const cryptoHash = require("../code/crypto-hash");
+const hexToBinary = require('hex-to-binary')
+
 
 describe("Block", () => {
   const timestamp = 14040322;
@@ -9,13 +11,6 @@ describe("Block", () => {
   const data = ["mosi", "python"];
   const difficulty = 1;
   const nonce = 1;
-
-  beforeEach(() => {
-    errorMock = jest.fn();
-    logMock = jest.fn();
-    global.console.error = errorMock;
-    global.console.log = logMock;
-  });
 
   const block = new Block({
     timestamp,
@@ -80,9 +75,17 @@ describe("Block", () => {
     });
 
     it("sets a `hash` that maches the difficulty criteria", () => {
-      expect(minedBlock.hash.substring(0, minedBlock.difficulty)).toEqual(
+      expect(hexToBinary(minedBlock.hash).substring(0, minedBlock.difficulty)).toEqual(
         "0".repeat(minedBlock.difficulty)
       );
+    });
+
+    it("adjust the difficulty ", () => {
+      const possibleResults = [
+        lastBlock.difficulty + 1,
+        lastBlock.difficulty - 1,
+      ];
+      expect(possibleResults.includes(minedBlock.difficulty)).toBe(true);
     });
   });
 
@@ -95,6 +98,7 @@ describe("Block", () => {
         })
       ).toEqual(block.difficulty + 1);
     });
+
     it("lowers the difficulty for a slowly mined block", () => {
       expect(
         Block.adjustDifficulty({
@@ -102,6 +106,11 @@ describe("Block", () => {
           timestamp: block.timestamp + MINE_RATE + 100,
         })
       ).toEqual(block.difficulty - 1);
+    });
+
+    it("has a lower limit of 1", () => {
+      block.difficulty = -1;
+      expect(Block.adjustDifficulty({ originalBlock: block })).toEqual(1);
     });
   });
 });

@@ -12,6 +12,7 @@
     "jest": "^30.0.0"
   },
   "dependencies": {
-    "@types/jest": "^29.5.14"
+    "@types/jest": "^29.5.14",
+    "hex-to-binary": "^1.0.1"
   }
 }
