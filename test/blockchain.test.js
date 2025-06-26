@@ -1,5 +1,6 @@
 const Block = require("../code/block");
 const Blockchain = require("../code/blockchain");
+const cryptoHash = require("../code/crypto-hash");
 
 describe("Blockchain", () => {
   let errorMock, logMock;
@@ -64,6 +65,31 @@ describe("Blockchain", () => {
         it("return true", () => {
           expect(Blockchain.isValidChain(blockchain.chain)).toBe(true);
         });
+      });
+    });
+
+    describe("when the chain contains a block with a jumped difficulty", () => {
+      it("returns false", () => {
+        const lastBlock = blockchain.chain[blockchain.chain.length - 1];
+        const lastHash = lastBlock.hash;
+        const timestamp = Date.now();
+        const nonce = 0;
+        const data = [];
+        const difficulty = lastBlock.difficulty - 3;
+        const hash = cryptoHash(timestamp, lastHash, difficulty, nonce, data);
+
+        const badBlock = new Block({
+          timestamp,
+          lastHash,
+          hash,
+          nonce,
+          difficulty,
+          data,
+        });
+
+        blockchain.chain.push(badBlock);
+
+        expect(Blockchain.isValidChain(blockchain.chain)).toBe(false);
       });
     });
   });
