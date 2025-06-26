@@ -20,6 +20,7 @@
     "express": "^5.1.0",
     "hex-to-binary": "^1.0.1",
     "nodemon": "^3.1.10",
-    "redis": "^5.5.6"
+    "redis": "^5.5.6",
+    "tcp-port-used": "^1.0.2"
   }
 }

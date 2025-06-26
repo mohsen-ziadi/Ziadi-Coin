@@ -1,5 +1,7 @@
 const express = require("express");
 const api = require("./api");
+const Blockchain = require("./blockchainApp/code/blockchain");
+const Pubsub = require("./utils/Pubsub");
 const { handler } = require("./errors/handlers");
 require("dotenv").config();
 
@@ -7,6 +9,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const blockchain = new Blockchain();
+const pubsub = new Pubsub({ blockchain });
+
+setTimeout(() => {
+  pubsub.broadcastChain();
+}, 1000);
 
 app.use("/api", api);
 
