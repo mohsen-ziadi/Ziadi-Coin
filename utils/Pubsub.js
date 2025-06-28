@@ -1,4 +1,5 @@
 const redis = require("redis");
+const { v4: uuidv4 } = require("uuid");
 
 const CHANNELS = {
   TEST: "TEST",
@@ -10,6 +11,7 @@ class Pubsub {
     this.blockchain = blockchain;
     this.publisher = redis.createClient();
     this.subscriber = redis.createClient();
+    this.instanceId = uuidv4();
 
     this.init();
   }
@@ -34,11 +36,12 @@ class Pubsub {
   }
 
   async publish({ channel, message }) {
-    await this.subscriber.unsubscribe(channel, () => {
-      this.publisher.publish(channel, message, () => {
-        this.subscriber.subscribe(channel);
-      });
+    const wrapped = JSON.stringify({
+      senderId: this.instanceId,
+      data: message,
     });
+
+    await this.publisher.publish(channel, wrapped);
   }
 
   async broadcastChain() {
@@ -48,10 +51,21 @@ class Pubsub {
     });
   }
 
-  handleMessage(channel, message) {
-    const parsedMessage = JSON.parse(message);
+  handleMessage(channel, rawMessage) {
+    let parsed;
+    try {
+      parsed = JSON.parse(rawMessage);
+    } catch (err) {
+      console.error("Invalid message format:", rawMessage);
+      return;
+    }
+
+    if (parsed.senderId === this.instanceId) return; 
+
+    const message = parsed.data;
+
     if (channel === CHANNELS.BLOCKCHAIN) {
-      this.blockchain.replaceChain(parsedMessage);
+      this.blockchain.replaceChain(JSON.parse(message));
     }
   }
 }
