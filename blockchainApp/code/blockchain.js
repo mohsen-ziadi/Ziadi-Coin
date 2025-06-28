@@ -63,6 +63,7 @@ class Blockchain {
     console.log("Replacing chain with: ", chain);
     this.chain = chain;
   }
+
 }
 
 module.exports = Blockchain;
