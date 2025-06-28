@@ -2,8 +2,9 @@ const express = require("express");
 const api = require("./api");
 const Blockchain = require("./blockchainApp/code/blockchain");
 const Pubsub = require("./utils/Pubsub");
+const axios = require("axios");
 const { handler } = require("./errors/handlers");
-const tcpPortUsed = require('tcp-port-used')
+const tcpPortUsed = require("tcp-port-used");
 require("dotenv").config();
 
 const app = express();
@@ -19,18 +20,20 @@ setTimeout(() => {
 }, 1000);
 
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] Request URL: ${req.originalUrl} - Method: ${req.method}`);
+  console.log(
+    `[${new Date().toISOString()}] Request URL: ${req.originalUrl} - Method: ${
+      req.method
+    }`
+  );
   next();
 });
 
 app.use("/api", api);
 
-
-
 app.use((req, res, next) => {
   const error = new Error(`Route ${req.originalUrl} Not Found`);
   error.status = 404;
-  console.error(`Route ${req.originalUrl} Not Found`)
+  console.error(`Route ${req.originalUrl} Not Found`);
   next(error);
 });
 
@@ -39,20 +42,28 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     success: false,
     status: err.status || 500,
-    message: err.message || "Internal Server Error"
+    message: err.message || "Internal Server Error",
   });
 });
 
-
 app.use(handler);
 
+const rootPort = Number(process.env.PORT);
 let PORT = Number(process.env.PORT);
 
-tcpPortUsed.check(PORT,'127.0.0.1')
-.then(function(inUse){
-  if(inUse){
-    PORT+=Math.ceil(Math.random()*1000);
-  }
-  app.listen(PORT,()=> console.log(`Server is Running on PORT: ${PORT}`))
-})
+async function syncChains() {
+  const response = await axios.get(`http://localhost:${rootPort}/api/blocks`);
 
+  blockchain.replaceChain(response.data.blockchain.chain);
+  
+}
+
+tcpPortUsed.check(PORT, "127.0.0.1").then(function (inUse) {
+  if (inUse) {
+    PORT += Math.ceil(Math.random() * 1000);
+  }
+  app.listen(PORT, () => {
+    console.log(`Server is Running on PORT: ${PORT}`);
+    if (PORT !== rootPort) syncChains();
+  });
+});
